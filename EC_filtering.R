@@ -12,12 +12,12 @@ remove_absolute_limits = function(df, column, upper_limit, lower_limit){
 }
 
 
-remove_absolute_limits_day_night = function(df, column, upper_limit_day, lower_limit_day, upper_limit_night, lower_limit_night){
+remove_absolute_limits_day_night = function(df, column, upper_limit_day, lower_limit_day, upper_limit_night, lower_limit_night, lat, lon){
   if(!column %in% colnames(df)){
     print(paste(column, " not found in dataframe"))
     return()
   }
-  df["is_day"] = photobiology::is_daytime(date=df$date_time, tz="GMT", geocode = tibble::tibble(lat=52.1757, lon=9.95543))
+  df["is_day"] = photobiology::is_daytime(date=df$date_time, tz="GMT", geocode = tibble::tibble(lat=lat, lon=lon))
   df[df["is_day"] == TRUE & df[column] > upper_limit_day & !is.na(df[column]), column] = NA
   df[df["is_day"] == TRUE & df[column] < lower_limit_day & !is.na(df[column]), column] = NA
   
