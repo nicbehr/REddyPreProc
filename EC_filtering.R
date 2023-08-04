@@ -13,6 +13,21 @@ remove_absolute_limits = function(df, column, upper_limit, lower_limit){
 
 
 remove_absolute_limits_day_night = function(df, column, upper_limit_day, lower_limit_day, upper_limit_night, lower_limit_night, lat, lon){
+  # removes absolute limits in a specified column by replacing with NA
+  # day/night is computed based on latitude and longitude, the date_time column and a specified
+  # timezone (make sure to set the right timezone (TODO!))
+  # Input:
+  #       df: dataframe containing the specified column and a date_time column
+  #       column: column to remove data from
+  #       upper_limit_day: upper limit above which data is replace with NA during day time
+  #       lower_limit_day: lower limit below which data is replace with NA during day time
+  #       upper_limit_night: upper limit above which data is replace with NA during night time
+  #       lower_limit_night: lower limit below which data is replace with NA during night time
+  #       lat: latitude of the station in decimal degrees
+  #       lon: longitude of the station in decimal degrees
+  # Output:
+  #       df: dataframe containing all of the input dataframe but values below/above
+  #           the threshold in the specified column replaced  with NA
   if(!column %in% colnames(df)){
     print(paste(column, " not found in dataframe"))
     return()
