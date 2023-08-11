@@ -42,6 +42,24 @@ remove_absolute_limits_day_night = function(df, column, upper_limit_day, lower_l
   return(df)
 }
 
+remove_partial_days = function(df){
+  #remove first day to get full days
+  last_day = tail(unique(as.Date(df$date_time)), n=1)
+  if(nrow(df[as.Date(df$date_time) == last_day,]) < 48){
+    midnight_row = head(df[as.Date(df$date_time) == last_day,], n=1)
+    df = subset(df, as.Date(df$date_time) != last_day)
+    df = rbind(df, midnight_row)
+  }
+  
+  #remove last day to get full days
+  first_day = head(unique(as.Date(df$date_time)), n=1)
+  if(nrow(df[as.Date(df$date_time) == first_day,]) < 48){
+    df = subset(df, as.Date(df$date_time) != first_day)
+    df = df[-c(1),]
+  }
+}
+
+
 get_data_slice = function(dataframe, startdate, enddate){
   # Gets a slice of data between certain timestamps from the dataset
   # depending on two datetimes (inclusively, meaning defined datetimes are included)
